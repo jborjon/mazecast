@@ -1,0 +1,37 @@
+# Build files
+/build/
+/debug/
+/release/
+/bin/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+*.code-workspace
+
+# Compiled files
+*.o
+*.obj
+*.out
+*.so
+*.exe
+*.dll
+
+# CMake stuff - thanks to
+# https://github.com/github/gitignore/blob/main/CMake.gitignore
+.cmake/
+CMakeFiles/
+CMakeScripts/
+Testing/
+_deps/
+CMakeLists.txt.user
+CMakeCache.txt
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+CMakeUserPresets.json
+Makefile
