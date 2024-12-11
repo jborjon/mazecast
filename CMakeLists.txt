@@ -18,7 +18,7 @@ set(CMAKE_C_FLAGS_RELEASE "-O3")
 if(UNIX)
     set(CMAKE_C_COMPILER gcc)
 elseif(WIN32)
-set(CMAKE_C_COMPILER clang)
+    set(CMAKE_C_COMPILER clang)
 endif()
 
 # Set output directories
