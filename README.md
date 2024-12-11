@@ -8,7 +8,7 @@ Mazecast is simple: You are thrown into a randomly generated 3D maze—likely th
 
 Programming a first-person-perspective raycaster has been a dream of mine since *Doom* was just under a decade old and I was just over a decade old. I suppose I'm enamored with the idea of being like those early FPS pioneers who wrote their own engines wielding the C programming language with nothing but their bare hands.
 
-I'm no longer that teenage boy who loved the piexelated violence of the mid-90s; I'm more of a pacifist these days. But the fascination with creating an explorable world out of lines of code is as strong as ever.
+I'm no longer that teenage boy who loved the pixelated violence of the mid-90s; I'm more of a pacifist these days. But the fascination with creating an explorable world out of lines of code is as strong as ever.
 
 So I'm using C and nothing else—not for the game itself, anyway. C99, to be specific. That standard's old enough to have existed in the 90s (the period I'm trying to relive) but modern enough to be still widely supported. And to not force me to declare counters outside of `for` loops:
 
