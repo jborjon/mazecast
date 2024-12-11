@@ -20,7 +20,7 @@
  */
 bool game_init(int argc, char **argv)
 {
-    puts("In game_init()");
+    puts("In game_init()!");
     return true;
 }
 
@@ -32,7 +32,7 @@ bool game_init(int argc, char **argv)
  */
 void game_runMainLoop(void)
 {
-    puts("In game_runMainLoop()");
+    puts("In game_runMainLoop()!");
     return;
 }
 
@@ -43,6 +43,6 @@ void game_runMainLoop(void)
  */
 void game_cleanUp(void)
 {
-    puts("In game_cleanUp()");
+    puts("In game_cleanUp()!");
     return;
 }

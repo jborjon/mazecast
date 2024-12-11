@@ -11,6 +11,8 @@
  */
 
 #include <stdlib.h>  // for EXIT_FAILURE
+#include "game.h"
+
 
 /**
  * @brief      The program's main function.
