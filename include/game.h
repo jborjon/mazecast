@@ -19,8 +19,8 @@
 /**
  * @brief      Initializes a game context.
  * 
- * @param argc The number of command-line arguments from main(), if any.
- * @param argv The list of command-line arguments from main(); can be null.
+ * @param argc Number of command-line arguments from main(), if any.
+ * @param argv List of command-line arguments from main(); can be null.
  * @return     Did the game initialize successfully?
  */
 bool game_init(int argc, char **argv);

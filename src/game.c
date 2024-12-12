@@ -15,8 +15,8 @@
 
 
 /**
- * Allocates and initializes the data structures required for a playable game
- * context.
+ * Parses the command-line arguments, if any are given. Allocates and
+ * initializes the data structures required for a playable game context.
  */
 bool game_init(int argc, char **argv)
 {
