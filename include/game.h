@@ -2,9 +2,9 @@
  * @file  game.h
  * @brief Header for the game module.
  * 
- * Declares the interface for the game module. Enables the caller to initialize
- * a game, run its main loop until the player exits, and clean up the memory
- * after exiting.
+ * Declares the interface for the game module. Enables the caller to
+ * initialize a game, run its main loop until the player exits, and
+ * clean up the memory after exiting.
  * 
  * @author Joseph Borjon
  * @date   2024-12-10
@@ -13,28 +13,36 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <stdbool.h>  // for the bool type
+
+/**
+ * @brief Container for all shared game properties.
+ * 
+ * Contains all relevant game properties needed by the different
+ * subsystems. Access and mutate its members through the functions
+ * provided by the game module interface.
+ */
+struct GameContext;
 
 
 /**
- * @brief      Initializes a game context.
+ * @brief Initializes a game context.
  * 
  * @param argc Number of command-line arguments from main(), if any.
  * @param argv List of command-line arguments from main(); can be null.
  * @return     Did the game initialize successfully?
  */
-bool game_init(int argc, char **argv);
+struct GameContext *game_initContext(int argc, char **argv);
 
 
 /**
  * @brief Starts and runs the main game loop until an exit condition is met.
  */
-void game_runMainLoop(void);
+void game_runMainLoop(struct GameContext *restrict pGame);
 
 
 /**
  * @brief Cleans up memory after a game; only call it after game_runMainLoop().
  */
-void game_cleanUp(void);
+void game_destroy(struct GameContext *restrict* ppGame);
 
 #endif  // GAME_H
