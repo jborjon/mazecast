@@ -12,13 +12,15 @@
 
 #include <stdio.h>     // for console I/O
 #include <stdlib.h>    // for malloc
+#include <stdbool.h>   // for the bool type
 #include <SDL3/SDL.h>  // for SDL3
 #include "game.h"      // the header implemented here
 #include "utils.h"     // for freeing memory
 
 struct GameContext {
-    SDL_Window   *restrict window;    ///< the program window
-    SDL_Renderer *restrict renderer;  ///< the renderer for the window
+    SDL_Window   *restrict window;     ///< the program window
+    SDL_Renderer *restrict renderer;   ///< the renderer for the window
+    bool                   isRunning;  ///< is the game currently running?
 };
 
 
@@ -72,6 +74,7 @@ struct GameContext *game_initContext(int argc, char **argv)
         return NULL;
     }
 
+    pGame->isRunning = false;  // we're not running yet
     return pGame;
 }
 
@@ -86,7 +89,7 @@ void game_runMainLoop(struct GameContext *restrict pGame)
     puts("In game_runMainLoop()!");  // TODO: remove
 
     SDL_Event event;
-    bool isRunning = true;
+    pGame->isRunning = true;
 
     // Handle input events
     do
@@ -98,10 +101,10 @@ void game_runMainLoop(struct GameContext *restrict pGame)
             case SDL_EVENT_KEY_DOWN:
                 if (event.key.key != SDLK_ESCAPE)
                 {
-                    break;
-                }   // fall through to quit unless the escape key is pressed
+                    break;  // fall through to quit unless escape is pressed
+                }
             case SDL_EVENT_QUIT:
-                isRunning = false;
+                pGame->isRunning = false;
                 break;
             }
         }
@@ -118,7 +121,7 @@ void game_runMainLoop(struct GameContext *restrict pGame)
         SDL_RenderPresent(pGame->renderer);
         SDL_Delay(16);
     }
-    while (isRunning);
+    while (pGame->isRunning);
 }
 
 
