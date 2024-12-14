@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 
     if (!pGame)
     {
-        perror("Aborting game due to initializion failure");
+        fputs("Aborting game due to initialization failure.\n\n", stderr);
         return EXIT_FAILURE;
     }
 

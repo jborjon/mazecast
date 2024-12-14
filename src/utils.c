@@ -8,7 +8,7 @@
  * @date   2024-12-13
  */
 
-#include <stdlib.h>  // for free
+#include <stdlib.h>  // for the C standard library
 #include <assert.h>  // for debugging assertions
 #include "utils.h"   // the header implemented here
 
