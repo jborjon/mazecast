@@ -16,12 +16,8 @@
 #include "game.h"           // for handling the game context
 
 
-/**
- * @brief The program's main function.
- * 
- * @param argc Number of arguments passed from the command line, if any.
- * @param argv List of arguments passed from the command line, if any.
- * @return     Program exit code.
+/*
+ * The program's main function.
  * 
  * Neither the order nor the number of command-line arguments matters
  * as long as the arguments are valid. Invalid arguments will be ignored
