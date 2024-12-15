@@ -158,7 +158,11 @@ static bool setDefaultValues(struct GameContext *restrict pGame)
     assert(pGame != NULL);
 
     // Allocate a window
-    pGame->window = SDL_CreateWindow("Mazecast", 1280, 720, 0);
+    pGame->isFullscreen         = false;
+    SDL_WindowFlags windowFlags =  (SDL_WINDOW_FULLSCREEN * pGame->isFullscreen)
+                                  | SDL_WINDOW_MOUSE_GRABBED
+                                  | SDL_WINDOW_KEYBOARD_GRABBED;
+    pGame->window = SDL_CreateWindow("Mazecast", 1280, 720, windowFlags);
 
     if (!pGame->window)
     {
@@ -184,8 +188,6 @@ static bool setDefaultValues(struct GameContext *restrict pGame)
         return false;
     }
 
-    pGame->isRunning    = false;  // we're not running yet
-    pGame->isFullscreen = false;
-
+    pGame->isRunning = false;  // we're not running yet
     return true;
 }
