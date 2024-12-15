@@ -18,20 +18,20 @@
 #include "game.h"      // the header implemented here
 #include "utils.h"     // for freeing memory
 
-#define IS_FULLSCREEN_DEFAULT  false
-
 struct GameContext {
     SDL_Window   *restrict window;            ///< the program window
     SDL_Renderer *restrict renderer;          ///< the renderer for the window
-    bool                   isRunning    : 1;  ///< is the game running?
-    bool                   isFullscreen : 1;  ///< is the game full screen?
+    bool                   isFullscreen : 1;  ///< is the game at full screen?
 };
 
 
 // === Static function prototypes === //
 
-// Sets the context members to their default values, printing any errors.
+// Sets the context members to their default values, printing any errors
 static bool setDefaultValues(struct GameContext *restrict pGame);
+
+// Reads user inputs, returning true unless the user quits
+static bool handleEvents(struct GameContext *restrict pGame);
 
 
 // === External function definitions === //
@@ -79,34 +79,8 @@ struct GameContext *game_initContext(int argc, char **argv)
  */
 void game_runMainLoop(struct GameContext *restrict pGame)
 {
-    SDL_Event event;
-    pGame->isRunning = true;  // and we're on
-
-    // Handle input events
-    do
+    while (handleEvents(pGame))  // handle input events
     {
-        while (SDL_PollEvent(&event))
-        {
-            switch (event.type)
-            {
-            case SDL_EVENT_KEY_DOWN:
-                switch (event.key.key)
-                {
-                case SDLK_F:
-                    pGame->isFullscreen = !pGame->isFullscreen;
-                    SDL_SetWindowFullscreen(pGame->window, pGame->isFullscreen);
-                    break;
-                case SDLK_ESCAPE:
-                    pGame->isRunning = false;
-                    break;
-                }
-                break;
-            case SDL_EVENT_QUIT:
-                pGame->isRunning = false;
-                break;
-            }
-        }
-
         // Render to the window
         SDL_SetRenderDrawColor(
             pGame->renderer,
@@ -119,7 +93,6 @@ void game_runMainLoop(struct GameContext *restrict pGame)
         SDL_RenderPresent(pGame->renderer);
         SDL_Delay(16);
     }
-    while (pGame->isRunning);
 }
 
 
@@ -160,7 +133,6 @@ static bool setDefaultValues(struct GameContext *restrict pGame)
     // Allocate a window
     pGame->isFullscreen         = false;
     SDL_WindowFlags windowFlags =  (SDL_WINDOW_FULLSCREEN * pGame->isFullscreen)
-                                  | SDL_WINDOW_MOUSE_GRABBED
                                   | SDL_WINDOW_KEYBOARD_GRABBED;
     pGame->window = SDL_CreateWindow("Mazecast", 1280, 720, windowFlags);
 
@@ -188,6 +160,37 @@ static bool setDefaultValues(struct GameContext *restrict pGame)
         return false;
     }
 
-    pGame->isRunning = false;  // we're not running yet
+    return true;
+}
+
+
+/*
+ * Reads user keyboard and mouse inputs. Always returns true unless the
+ * user's input generates a quit event, so the return value can be used
+ * to stop the main loop.
+ */
+static bool handleEvents(struct GameContext *restrict pGame)
+{
+    static SDL_Event event;
+    while (SDL_PollEvent(&event))
+    {
+        switch (event.type)
+        {
+        case SDL_EVENT_KEY_DOWN:
+            switch (event.key.key)
+            {
+            case SDLK_F:
+                pGame->isFullscreen = !pGame->isFullscreen;
+                SDL_SetWindowFullscreen(pGame->window, pGame->isFullscreen);
+                break;
+            case SDLK_ESCAPE:
+                return false;
+            }
+            break;
+        case SDL_EVENT_QUIT:
+            return false;
+        }
+    }
+
     return true;
 }
