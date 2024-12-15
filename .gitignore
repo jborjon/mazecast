@@ -1,4 +1,4 @@
-# Build files
+# Build directories
 /bin/
 /build/
 debug/
@@ -14,6 +14,7 @@ release/
 
 # CMake stuff - thanks to
 # https://github.com/github/gitignore/blob/main/CMake.gitignore
+[Mm]akefile
 .cmake/
 CMakeFiles/
 CMakeScripts/
@@ -26,7 +27,6 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 CMakeUserPresets.json
-[Mm]akefile
 
 # Doxygen stuff
 /docs/*
@@ -48,10 +48,6 @@ CMakeUserPresets.json
 *.ilk
 *.map
 *.exp
-
-# Precompiled Headers
-*.gch
-*.pch
 
 # Libraries
 *.lib
