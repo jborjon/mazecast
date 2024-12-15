@@ -1,24 +1,16 @@
 # Build files
-/build/
-/debug/
-/release/
 /bin/
+/build/
+debug/
+release/
 
 # OS files
 .DS_Store
-Thumbs.db
+[Tt]humbs.db
 
 # Editor files
 .vscode/
 *.code-workspace
-
-# Compiled files
-*.o
-*.obj
-*.out
-*.so
-*.exe
-*.dll
 
 # CMake stuff - thanks to
 # https://github.com/github/gitignore/blob/main/CMake.gitignore
@@ -34,8 +26,55 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 CMakeUserPresets.json
-Makefile
-makefile
+[Mm]akefile
 
 # Doxygen stuff
-#docs/
+/docs/*
+!Doxyfile
+
+# C stuff - thanks to
+# https://github.com/github/gitignore/blob/main/C.gitignore
+
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects
+*.so
+*.so.*
+*.dylib
+*.dll
+
+# Executables
+*.out
+*.exe
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.idb
+*.pdb
+*.dSYM/
+*.su
