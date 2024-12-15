@@ -30,7 +30,7 @@ struct GameContext {
 // Sets the context members to their default values, printing any errors
 static bool setDefaultValues(struct GameContext *restrict pGame);
 
-// Reads user inputs, returning true unless the user quits
+// Reads user inputs, always returning true unless the user quits
 static bool handleEvents(struct GameContext *restrict pGame);
 
 
@@ -167,7 +167,7 @@ static bool setDefaultValues(struct GameContext *restrict pGame)
 /*
  * Reads user keyboard and mouse inputs. Always returns true unless the
  * user's input generates a quit event, so the return value can be used
- * to stop the main loop.
+ * to check whether the user has quit.
  */
 static bool handleEvents(struct GameContext *restrict pGame)
 {
