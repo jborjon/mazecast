@@ -18,10 +18,13 @@
 #include "game.h"      // the header implemented here
 #include "utils.h"     // for freeing memory
 
+#define IS_FULLSCREEN_DEFAULT  false
+
 struct GameContext {
-    SDL_Window   *restrict window;     ///< the program window
-    SDL_Renderer *restrict renderer;   ///< the renderer for the window
-    bool                   isRunning;  ///< is the game currently running?
+    SDL_Window   *restrict window;            ///< the program window
+    SDL_Renderer *restrict renderer;          ///< the renderer for the window
+    bool                   isRunning    : 1;  ///< is the game running?
+    bool                   isFullscreen : 1;  ///< is the game full screen?
 };
 
 
@@ -77,7 +80,7 @@ struct GameContext *game_initContext(int argc, char **argv)
 void game_runMainLoop(struct GameContext *restrict pGame)
 {
     SDL_Event event;
-    pGame->isRunning = true;
+    pGame->isRunning = true;  // and we're on
 
     // Handle input events
     do
@@ -87,10 +90,17 @@ void game_runMainLoop(struct GameContext *restrict pGame)
             switch (event.type)
             {
             case SDL_EVENT_KEY_DOWN:
-                if (event.key.key != SDLK_ESCAPE)
+                switch (event.key.key)
                 {
-                    break;  // fall through to quit unless escape is pressed
+                case SDLK_F:
+                    pGame->isFullscreen = !pGame->isFullscreen;
+                    SDL_SetWindowFullscreen(pGame->window, pGame->isFullscreen);
+                    break;
+                case SDLK_ESCAPE:
+                    pGame->isRunning = false;
+                    break;
                 }
+                break;
             case SDL_EVENT_QUIT:
                 pGame->isRunning = false;
                 break;
@@ -174,6 +184,8 @@ static bool setDefaultValues(struct GameContext *restrict pGame)
         return false;
     }
 
-    pGame->isRunning = false;  // we're not running yet
+    pGame->isRunning    = false;  // we're not running yet
+    pGame->isFullscreen = false;
+
     return true;
 }
