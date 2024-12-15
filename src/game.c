@@ -46,7 +46,7 @@ struct GameContext *game_initContext(int argc, char **argv)
     {
         SDL_LogError(
             SDL_LOG_CATEGORY_ERROR,
-            "SDL3 failed to initialize: %s",
+            "SDL3 failed to initialize: %s.",
             SDL_GetError()
         );
         return NULL;
@@ -164,7 +164,7 @@ static bool setDefaultValues(struct GameContext *restrict pGame)
     {
         SDL_LogError(
             SDL_LOG_CATEGORY_ERROR,
-            "Failed to create a window for the game: %s",
+            "Failed to create a window for the game: %s.",
             SDL_GetError()
         );
         return false;
@@ -177,7 +177,7 @@ static bool setDefaultValues(struct GameContext *restrict pGame)
     {
         SDL_LogError(
             SDL_LOG_CATEGORY_ERROR,
-            "Failed to initialize a renderer for the game window: %s",
+            "Failed to initialize a renderer for the game window: %s.",
             SDL_GetError()
         );
         free(pGame->window);
