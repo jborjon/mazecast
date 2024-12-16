@@ -181,7 +181,7 @@ static bool setDefaultValues(struct GameContext *restrict pGame)
  */
 static void clearEventQueue(SDL_Event *restrict pEvent)
 {
-    while (SDL_PollEvent(&event))
+    while (SDL_PollEvent(pEvent))
         ;  // empty on purpose
 }
 
@@ -199,10 +199,10 @@ static bool handleEvents(
 
     while (SDL_PollEvent(pEvent))
     {
-        switch (pEvent.type)
+        switch (pEvent->type)
         {
         case SDL_EVENT_KEY_DOWN:
-            switch (pEvent.key.key)
+            switch (pEvent->key.key)
             {
             case SDLK_F:
                 pGame->isFullscreen = !pGame->isFullscreen;
