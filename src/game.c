@@ -30,8 +30,14 @@ struct GameContext {
 // Sets the context members to their default values, printing any errors
 static bool setDefaultValues(struct GameContext *restrict pGame);
 
-// Reads user inputs, always returning true unless the user quits; non reentrant
-static bool handleEvents(struct GameContext *restrict pGame);
+// Clears all events in the event queue at the moment it's invoked
+static void clearEventQueue(SDL_Event *restrict pEvent);
+
+// Reads user inputs, always returning true unless the user quits
+static bool handleEvents(
+    struct GameContext *restrict pGame,
+    SDL_Event          *restrict pEvent
+);
 
 
 // === External function definitions === //
@@ -79,7 +85,11 @@ struct GameContext *game_initContext(int argc, char **argv)
  */
 void game_runMainLoop(struct GameContext *restrict pGame)
 {
-    while (handleEvents(pGame))  // handle input events
+    SDL_Event event;
+    clearEventQueue(&event);
+
+    // Run the main loop
+    while (handleEvents(pGame, &event))
     {
         // Render to the window
         SDL_SetRenderDrawColor(
@@ -130,10 +140,10 @@ static bool setDefaultValues(struct GameContext *restrict pGame)
 {
     assert(pGame != NULL);
 
-    // Allocate a window
     pGame->isFullscreen         = false;
     SDL_WindowFlags windowFlags =  (SDL_WINDOW_FULLSCREEN * pGame->isFullscreen)
                                   | SDL_WINDOW_KEYBOARD_GRABBED;
+    // Allocate a window
     pGame->window = SDL_CreateWindow("Mazecast", 1280, 720, windowFlags);
 
     if (!pGame->window)
@@ -164,35 +174,50 @@ static bool setDefaultValues(struct GameContext *restrict pGame)
 }
 
 
+/**
+ * Reads all the events currently in SDL3's event queue and does nothing
+ * with them, effectively discarding them. Call right before starting
+ * the main loop and right after transitioning states.
+ */
+static void clearEventQueue(SDL_Event *restrict pEvent)
+{
+    while (SDL_PollEvent(&event))
+        ;  // empty on purpose
+}
+
+
 /*
  * Reads user keyboard and mouse inputs. Always returns true unless the
  * user's input generates a quit event, so the return value can be used
  * to check whether the user has quit.
- * 
- * Non reentrant; it should only be called from the main thread.
  */
-static bool handleEvents(struct GameContext *restrict pGame)
-{
-    static SDL_Event event;
-    while (SDL_PollEvent(&event))
+static bool handleEvents(
+    struct GameContext *restrict pGame,
+    SDL_Event          *restrict pEvent
+) {
+    bool isRunning = true;  // for the return value, not the loop below
+
+    while (SDL_PollEvent(pEvent))
     {
-        switch (event.type)
+        switch (pEvent.type)
         {
         case SDL_EVENT_KEY_DOWN:
-            switch (event.key.key)
+            switch (pEvent.key.key)
             {
             case SDLK_F:
                 pGame->isFullscreen = !pGame->isFullscreen;
                 SDL_SetWindowFullscreen(pGame->window, pGame->isFullscreen);
                 break;
             case SDLK_ESCAPE:
-                return false;
+                isRunning = false;
+                break;
             }
             break;
         case SDL_EVENT_QUIT:
-            return false;
+            isRunning = false;
+            break;
         }
     }
 
-    return true;
+    return isRunning;
 }
