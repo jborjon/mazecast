@@ -3,8 +3,8 @@
  * @brief Implementation of the game module.
  * 
  * Defines the interface for the game module and provides internal
- * functions and data structures to create, interact with, update, and
- * delete the game state.
+ * helper functions and data structures to initialize, interact with,
+ * update, and delete the game state.
  * 
  * @author Joseph Borjon
  * @date   2024-12-10
@@ -16,7 +16,7 @@
 #include <assert.h>    // for debugging assertions
 #include <SDL3/SDL.h>  // for SDL3
 #include "game.h"      // the header implemented here
-#include "utils.h"     // for freeing memory
+#include "utils.h"     // for freeing pointers
 
 struct GameContext {
     SDL_Window   *restrict window;            ///< the program window

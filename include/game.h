@@ -1,6 +1,6 @@
 /**
  * @file  game.h
- * @brief Header for the game module.
+ * @brief Header for the game module, which handles core game logic.
  * 
  * Declares the interface for the game module. Enables the caller to
  * initialize a game, run its main loop until the player exits, and
@@ -12,7 +12,6 @@
 
 #ifndef GAME_H
 #define GAME_H
-
 
 /**
  * @brief Container for all shared game properties.

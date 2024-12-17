@@ -12,7 +12,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-
 /**
  * @brief Frees the pointed-to pointer and automatically sets its value to NULL.
  * @param ppData A pointer to the pointer being freed.
