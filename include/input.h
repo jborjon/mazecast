@@ -10,8 +10,16 @@
  * @date   2024-12-16
  */
 
-#include <stdint.h>  // for uint8_t
+#ifndef INPUT_H
+#define INPUT_H
 
-typedef uint8_t InputState;
+/**
+ * @brief The current state of the input devices, the keyboard and mouse.
+ * 
+ * Contains all the states of the keyboard keys (pressed or not) and
+ * mouse motion data necessary for the program to take the actions
+ * specified by the user at any given time.
+ */
+struct UserInput;
 
-InputState input_pollKeys(void);
+#endif  // INPUT_H

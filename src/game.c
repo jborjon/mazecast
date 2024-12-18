@@ -19,19 +19,19 @@
 #include "utils.h"     // for freeing pointers
 
 struct GameContext {
-    SDL_Window   *restrict window;            ///< the program window
-    SDL_Renderer *restrict renderer;          ///< the renderer for the window
-    bool                   isFullscreen : 1;  ///< is the game at full screen?
+    SDL_Window   *restrict window;            // the program window
+    SDL_Renderer *restrict renderer;          // the renderer for the window
+    bool                   isFullscreen : 1;  // is the game at full screen?
 };
 
 
 // === Static function prototypes === //
 
 // Sets the context members to their default values, printing any errors
-static bool setDefaultValues(struct GameContext *restrict pGame);
+static bool setDefaultValues(struct GameContext *pGame);
 
 // Clears all events in the event queue at the moment it's invoked
-static void clearEventQueue(SDL_Event *restrict pEvent);
+static void clearEventQueue(SDL_Event *pEvent);
 
 // Reads user inputs, always returning true unless the user quits
 static bool handleEvents(
@@ -58,20 +58,18 @@ struct GameContext *game_initContext(int argc, char **argv)
         return NULL;
     }
 
-    struct GameContext *restrict pGame = malloc(sizeof(*pGame));
+    struct GameContext *pGame = malloc(sizeof(*pGame));
 
     if (pGame)
     {
-        if (!setDefaultValues(pGame))  // make sure setting values succeeds
+        if (!setDefaultValues(pGame))     // make sure setting values succeeds
         {
-            free(pGame);
-            return NULL;
+            freeMemory((void **)&pGame);  // sets pGame to NULL
         }
     }
     else
     {
         perror("Error: Unable to allocate a game context");
-        return NULL;
     }
 
     return pGame;
@@ -110,7 +108,7 @@ void game_runMainLoop(struct GameContext *restrict pGame)
  * Deallocates every bit of memory allocated for the game and nullifies
  * all pointers to that memory.
  */
-void game_destroy(struct GameContext *restrict* ppGame)
+void game_destroy(struct GameContext **ppGame)
 {
     SDL_DestroyRenderer((*ppGame)->renderer);
     (*ppGame)->renderer = NULL;
@@ -119,7 +117,7 @@ void game_destroy(struct GameContext *restrict* ppGame)
     (*ppGame)->window = NULL;
 
     SDL_Quit();
-    freeMemory((void *restrict*)ppGame);
+    freeMemory((void **)ppGame);
 }
 
 
@@ -136,7 +134,7 @@ void game_destroy(struct GameContext *restrict* ppGame)
  * Can also be used to reset the game context values to their defaults
  * after modifying them.
  */
-static bool setDefaultValues(struct GameContext *restrict pGame)
+static bool setDefaultValues(struct GameContext *pGame)
 {
     assert(pGame != NULL);
 
@@ -179,7 +177,7 @@ static bool setDefaultValues(struct GameContext *restrict pGame)
  * with them, effectively discarding them. Call right before starting
  * the main loop and right after transitioning states.
  */
-static void clearEventQueue(SDL_Event *restrict pEvent)
+static void clearEventQueue(SDL_Event *pEvent)
 {
     while (SDL_PollEvent(pEvent))
         ;  // empty on purpose
@@ -204,10 +202,6 @@ static bool handleEvents(
         case SDL_EVENT_KEY_DOWN:
             switch (pEvent->key.key)
             {
-            case SDLK_F:
-                pGame->isFullscreen = !pGame->isFullscreen;
-                SDL_SetWindowFullscreen(pGame->window, pGame->isFullscreen);
-                break;
             case SDLK_ESCAPE:
                 isRunning = false;
                 break;
@@ -217,6 +211,16 @@ static bool handleEvents(
             isRunning = false;
             break;
         }
+    }
+
+    // Poll the state of each key and react as necessary
+    const bool *keyStates = SDL_GetKeyboardState(NULL);
+
+    if ((keyStates[SDL_SCANCODE_LALT] || keyStates[SDL_SCANCODE_RALT]) &&
+         keyStates[SDL_SCANCODE_RETURN])
+    {
+        pGame->isFullscreen = !pGame->isFullscreen;
+        SDL_SetWindowFullscreen(pGame->window, pGame->isFullscreen);
     }
 
     return isRunning;

@@ -42,6 +42,6 @@ void game_runMainLoop(struct GameContext *restrict pGame);
 /**
  * @brief Cleans up memory after a game; only call it after game_runMainLoop().
  */
-void game_destroy(struct GameContext *restrict* ppGame);
+void game_destroy(struct GameContext **ppGame);
 
 #endif  // GAME_H

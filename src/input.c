@@ -9,9 +9,11 @@
  * @date   2024-12-16
  */
 
-#include "input.h"
+#include "input.h"  // the header implemented here
 
-InputState input_pollKeys(void)
+struct UserInput
 {
-    return 1;
-}
+    int   keyboardState;  // bit field of keys pressed/not pressed
+    float xMouseMotion;   // the relative x motion of the mouse
+    float yMouseMotion;   // the relative y motion of the mouse
+};
