@@ -46,7 +46,7 @@ static bool handleEvents(
  * Parses the command-line arguments, if any are given. Allocates and
  * initializes the data structures required for a playable game context.
  */
-struct GameContext *game_initContext(int argc, char **argv)
+struct GameContext * game_initContext(int argc, char **argv)
 {
     if (!SDL_Init(SDL_INIT_VIDEO))  // implies event init too
     {
@@ -138,9 +138,11 @@ static bool setDefaultValues(struct GameContext *pGame)
 {
     assert(pGame != NULL);
 
-    pGame->isFullscreen         = false;
-    SDL_WindowFlags windowFlags =  (SDL_WINDOW_FULLSCREEN * pGame->isFullscreen)
-                                  | SDL_WINDOW_KEYBOARD_GRABBED;
+    pGame->isFullscreen = false;
+    SDL_WindowFlags windowFlags =
+         (SDL_WINDOW_FULLSCREEN * pGame->isFullscreen)
+        | SDL_WINDOW_KEYBOARD_GRABBED;
+
     // Allocate a window
     pGame->window = SDL_CreateWindow("Mazecast", 1280, 720, windowFlags);
 
@@ -214,10 +216,10 @@ static bool handleEvents(
     }
 
     // Poll the state of each key
-    const bool *keyStates = SDL_GetKeyboardState(NULL);
+    const bool *KEY_STATES = SDL_GetKeyboardState(NULL);
 
-    if ((keyStates[SDL_SCANCODE_LALT] || keyStates[SDL_SCANCODE_RALT]) &&
-         keyStates[SDL_SCANCODE_RETURN])
+    if ((KEY_STATES[SDL_SCANCODE_LALT] || KEY_STATES[SDL_SCANCODE_RALT]) &&
+         KEY_STATES[SDL_SCANCODE_RETURN])
     {
         pGame->isFullscreen = !pGame->isFullscreen;
         SDL_SetWindowFullscreen(pGame->window, pGame->isFullscreen);
