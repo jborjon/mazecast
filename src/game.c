@@ -196,8 +196,8 @@ static bool handleEvents(
     SDL_Event          *restrict pEvent
 ) {
     // To keep track of the two fullscreen toggling keys
-    static bool isFullscreen1Down = false;
-    static bool isFullscreen2Down = false;
+    static bool isFullscrKey1Down = false;
+    static bool isFullscrKey2Down = false;
 
     bool isRunning = true;  // for the return value, not the loop below
     while (SDL_PollEvent(pEvent))
@@ -212,22 +212,22 @@ static bool handleEvents(
                 break;
             case SDLK_LALT:    // fall through to catch either key
             case SDLK_RALT:
-                isFullscreen1Down = true;
+                isFullscrKey1Down = true;
                 break;
             case SDLK_RETURN:
-                isFullscreen2Down = true;
+                isFullscrKey2Down = true;
                 break;
             }
 
             // Toggle full screen
-            if (isFullscreen1Down && isFullscreen2Down)
+            if (isFullscrKey1Down && isFullscrKey2Down)
             {
                 pGame->isFullscreen = !pGame->isFullscreen;
                 SDL_SetWindowFullscreen(pGame->window, pGame->isFullscreen);
     
                 // Prevent repeated toggling until after the keys are released
-                isFullscreen1Down = false;
-                isFullscreen2Down = false;
+                isFullscrKey1Down = false;
+                isFullscrKey2Down = false;
             }
             break;  // SDL_EVENT_KEY_DOWN
         case SDL_EVENT_KEY_UP:
@@ -235,10 +235,10 @@ static bool handleEvents(
             {
             case SDLK_LALT:    // fall through to catch either key
             case SDLK_RALT:
-                isFullscreen1Down = false;
+                isFullscrKey1Down = false;
                 break;
             case SDLK_RETURN:
-                isFullscreen2Down = false;
+                isFullscrKey2Down = false;
                 break;
             }
             break;  // SDL_EVENT_KEY_UP
