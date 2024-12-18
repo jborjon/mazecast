@@ -18,7 +18,7 @@
  * equal to NULL after freeing it, without needing to nullify it outside
  * the function call.
  */
-void freeMemory(void *restrict* ppData)
+void freeMemory(void **ppData)
 {
     assert(ppData != NULL);
 

@@ -16,6 +16,6 @@
  * @brief Frees the pointed-to pointer and automatically sets its value to NULL.
  * @param ppData A pointer to the pointer being freed.
  */
-void freeMemory(void *restrict* ppData);
+void freeMemory(void **ppData);
 
 #endif  // UTILS_H
