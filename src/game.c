@@ -195,8 +195,11 @@ static bool handleEvents(
     struct GameContext *restrict pGame,
     SDL_Event          *restrict pEvent
 ) {
-    bool isRunning = true;  // for the return value, not the loop below
+    // To keep track of the two fullscreen toggling keys
+    static bool isFulscreen1Down = false;
+    static bool isFulscreen2Down = false;
 
+    bool isRunning = true;  // for the return value, not the loop below
     while (SDL_PollEvent(pEvent))
     {
         switch (pEvent->type)
@@ -204,25 +207,45 @@ static bool handleEvents(
         case SDL_EVENT_KEY_DOWN:
             switch (pEvent->key.key)
             {
-            case SDLK_ESCAPE:
+            case SDLK_ESCAPE:  // quit the main loop
                 isRunning = false;
                 break;
+            case SDLK_LALT:    // fall through to catch either key
+            case SDLK_RALT:
+                isFulscreen1Down = true;
+                break;
+            case SDLK_RETURN:
+                isFulscreen2Down = true;
+                break;
             }
-            break;
+
+            // Toggle full screen
+            if (isFulscreen1Down && isFulscreen2Down)
+            {
+                pGame->isFullscreen = !pGame->isFullscreen;
+                SDL_SetWindowFullscreen(pGame->window, pGame->isFullscreen);
+    
+                // Prevent repeated toggling until after the keys are released
+                bool isFulscreen1Down = false;
+                bool isFulscreen2Down = false;
+            }
+            break;  // SDL_EVENT_KEY_DOWN
+        case SDL_EVENT_KEY_UP:
+            switch (pEvent->key.key)
+            {
+            case SDLK_LALT:    // fall through to catch either key
+            case SDLK_RALT:
+                isFulscreen1Down = false;
+                break;
+            case SDLK_RETURN:
+                isFulscreen2Down = false;
+                break;
+            }
+            break;  // SDL_EVENT_KEY_UP
         case SDL_EVENT_QUIT:
             isRunning = false;
             break;
         }
-    }
-
-    // Poll the state of each key
-    const bool *KEY_STATES = SDL_GetKeyboardState(NULL);
-
-    if ((KEY_STATES[SDL_SCANCODE_LALT] || KEY_STATES[SDL_SCANCODE_RALT]) &&
-         KEY_STATES[SDL_SCANCODE_RETURN])
-    {
-        pGame->isFullscreen = !pGame->isFullscreen;
-        SDL_SetWindowFullscreen(pGame->window, pGame->isFullscreen);
     }
 
     return isRunning;
