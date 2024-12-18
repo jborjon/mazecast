@@ -213,7 +213,7 @@ static bool handleEvents(
         }
     }
 
-    // Poll the state of each key and react as necessary
+    // Poll the state of each key
     const bool *keyStates = SDL_GetKeyboardState(NULL);
 
     if ((keyStates[SDL_SCANCODE_LALT] || keyStates[SDL_SCANCODE_RALT]) &&
