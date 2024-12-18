@@ -30,7 +30,7 @@ struct GameContext;
  * @param argv List of command-line arguments from main(); can be null.
  * @return     Did the game initialize successfully?
  */
-struct GameContext *game_initContext(int argc, char **argv);
+struct GameContext * game_initContext(int argc, char **argv);
 
 
 /**
