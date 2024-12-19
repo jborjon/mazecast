@@ -1,7 +1,7 @@
 /**
  * @file  input.h
  * @brief Header for the input module, which handles user input.
- * 
+ *
  * Declares the interface for the input module. Enables the caller to
  * get the state of the input devices pertinent to the actions available
  * in the game.
