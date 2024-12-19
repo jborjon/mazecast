@@ -1,10 +1,10 @@
 /**
  * @file  utils.h
  * @brief Header for utils, a set of common general-purpose functions.
- * 
+ *
  * Declares the interface for the utils module, which provides functions
  * for commonly performed operations.
- * 
+ *
  * @author Joseph Borjon
  * @date   2024-12-13
  */

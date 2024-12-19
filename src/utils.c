@@ -1,9 +1,9 @@
 /**
  * @file  utils.c
  * @brief Implementation of the utils module.
- * 
+ *
  * Defines the interface for the utils module,
- * 
+ *
  * @author Joseph Borjon
  * @date   2024-12-13
  */

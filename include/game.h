@@ -1,11 +1,11 @@
 /**
  * @file  game.h
  * @brief Header for the game module, which handles core game logic.
- * 
+ *
  * Declares the interface for the game module. Enables the caller to
  * initialize a game, run its main loop until the player exits, and
  * clean up the memory after exiting.
- * 
+ *
  * @author Joseph Borjon
  * @date   2024-12-10
  */
@@ -15,7 +15,7 @@
 
 /**
  * @brief Container for all shared game properties.
- * 
+ *
  * Contains all relevant game properties needed by the different
  * subsystems. Access and mutate its members through the functions
  * provided by the game module interface.
@@ -25,7 +25,7 @@ struct GameContext;
 
 /**
  * @brief Initializes a game context.
- * 
+ *
  * @param argc Number of command-line arguments from main(), if any.
  * @param argv List of command-line arguments from main(); can be null.
  * @return     Did the game initialize successfully?

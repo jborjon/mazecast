@@ -16,6 +16,7 @@
 #include <assert.h>    // for debugging assertions
 #include <SDL3/SDL.h>  // for SDL3
 #include "game.h"      // the header implemented here
+#include "input.h"     // for handling user input
 #include "utils.h"     // for freeing pointers
 
 struct GameContext {
@@ -32,12 +33,6 @@ static bool setDefaultValues(struct GameContext *pGame);
 
 // Clears all events in the event queue at the moment it's invoked
 static void clearEventQueue(SDL_Event *pEvent);
-
-// Reads user inputs, always returning true unless the user quits
-static bool handleEvents(
-    struct GameContext *restrict pGame,
-    SDL_Event          *restrict pEvent
-);
 
 
 // === External function definitions === //
@@ -87,7 +82,7 @@ void game_runMainLoop(struct GameContext *restrict pGame)
     clearEventQueue(&event);
 
     // Run the main loop
-    while (handleEvents(pGame, &event))
+    while (input_handleUserEvents(pGame, &event))
     {
         // Render to the window
         SDL_SetRenderDrawColor(
@@ -126,11 +121,11 @@ void game_destroy(struct GameContext **ppGame)
 /*
  * Specifies sensible values for a brand-new game context; for example,
  * all the pointers are set to NULL.
- * 
+ *
  * In case of failing to initialize any value, it prints its own error
  * message to specify which one did, stopping after the first failure
  * and freeing any members allocated up to that point.
- * 
+ *
  * Can also be used to reset the game context values to their defaults
  * after modifying them.
  */
@@ -183,70 +178,4 @@ static void clearEventQueue(SDL_Event *pEvent)
 {
     while (SDL_PollEvent(pEvent))
         ;  // empty on purpose
-}
-
-
-/*
- * Reads user keyboard and mouse inputs. Always returns true unless the
- * user's input generates a quit event, so the return value can be used
- * to check whether the user has quit.
- */
-static bool handleEvents(
-    struct GameContext *restrict pGame,
-    SDL_Event          *restrict pEvent
-) {
-    // To keep track of the two fullscreen toggling keys
-    static bool isFullscrKey1Down = false;
-    static bool isFullscrKey2Down = false;
-
-    bool isRunning = true;  // for the return value, not the loop below
-    while (SDL_PollEvent(pEvent))
-    {
-        switch (pEvent->type)
-        {
-        case SDL_EVENT_KEY_DOWN:
-            switch (pEvent->key.key)
-            {
-            case SDLK_ESCAPE:  // quit the main loop
-                isRunning = false;
-                break;
-            case SDLK_LALT:    // fall through to catch either key
-            case SDLK_RALT:
-                isFullscrKey1Down = true;
-                break;
-            case SDLK_RETURN:
-                isFullscrKey2Down = true;
-                break;
-            }
-
-            // Toggle full screen
-            if (isFullscrKey1Down && isFullscrKey2Down)
-            {
-                pGame->isFullscreen = !pGame->isFullscreen;
-                SDL_SetWindowFullscreen(pGame->window, pGame->isFullscreen);
-    
-                // Prevent repeated toggling until after the keys are released
-                isFullscrKey1Down = false;
-                isFullscrKey2Down = false;
-            }
-            break;  // SDL_EVENT_KEY_DOWN
-        case SDL_EVENT_KEY_UP:
-            switch (pEvent->key.key)
-            {
-            case SDLK_LALT:    // fall through to catch either key
-            case SDLK_RALT:
-                isFullscrKey1Down = false;
-                break;
-            case SDLK_RETURN:
-                isFullscrKey2Down = false;
-                break;
-            }
-            break;  // SDL_EVENT_KEY_UP
-        case SDL_EVENT_QUIT:
-            isRunning = false;
-            break;
-        }
-    }
-
-    return isRunning;
 }

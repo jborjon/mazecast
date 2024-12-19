@@ -1,11 +1,11 @@
 /**
  * @file  main.c
  * @brief Contains main(), the entry and exit point for the game.
- * 
+ *
  * Contains the main function of the program, which calls the procedures
  * to initialize a game context, run its main loop, and clean up the
  * memory after the game ends.
- * 
+ *
  * @author Joseph Borjon
  * @date   2024-12-10
  */
@@ -18,7 +18,7 @@
 
 /*
  * The program's main function.
- * 
+ *
  * Neither the order nor the number of command-line arguments matters
  * as long as the arguments are valid. Invalid arguments will be ignored
  * after issuing a warning. The possible argument values, prefixed with
