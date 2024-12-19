@@ -24,23 +24,30 @@ struct GameContext;
 
 
 /**
- * @brief Initializes a game context.
+ * @brief Initializes a game context and returns a pointer to it.
+ *
+ * Prints its own error messages to indicate which part of the
+ * initialization failed, if any. Always call this function before
+ * running the main game loop; i.e., don't ever pass an uninitialized or
+ * null pointer to game_runMainLoop.
  *
  * @param argc Number of command-line arguments from main(), if any.
  * @param argv List of command-line arguments from main(); can be null.
- * @return     Did the game initialize successfully?
+ * @return     Pointer to the just-initialized game context, or NULL on failure.
  */
 struct GameContext * game_initContext(int argc, char **argv);
 
 
 /**
  * @brief Starts and runs the main game loop until an exit condition is met.
+ * @param pGame Pointer to the game context.
  */
 void game_runMainLoop(struct GameContext *restrict pGame);
 
 
 /**
- * @brief Cleans up memory after a game; only call it after game_runMainLoop().
+ * @brief Cleans up memory after a game; only call it after game_runMainLoop.
+ * @param ppGame Pointer to the game-context pointer.
  */
 void game_destroy(struct GameContext **ppGame);
 
