@@ -1,11 +1,11 @@
 /**
  * @file  game.c
  * @brief Implementation of the game module.
- * 
+ *
  * Defines the interface for the game module and provides internal
  * helper functions and data structures to initialize, interact with,
  * update, and delete the game state.
- * 
+ *
  * @author Joseph Borjon
  * @date   2024-12-10
  */
