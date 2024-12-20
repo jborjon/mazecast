@@ -16,6 +16,13 @@
 #include <stdbool.h>   // for the bool type
 #include <SDL3/SDL.h>  // for SDL3
 
+enum UserCommand
+{
+    COMMAND_TOGGLE_FULLSCREEN,
+    COMMAND_QUIT,
+    NUM_COMMANDS
+};
+
 /**
  * @brief The current state of the input devices, the keyboard and mouse.
  *
