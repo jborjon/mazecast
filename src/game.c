@@ -82,7 +82,7 @@ void game_runMainLoop(struct GameContext *restrict pGame)
     clearEventQueue(&event);
 
     // Run the main loop
-    while (input_handleUserEvents(pGame, &event))
+    while (input_getNextCommand(pGame, &event))
     {
         // Render to the window
         SDL_SetRenderDrawColor(

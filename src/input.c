@@ -13,7 +13,11 @@
 #include <SDL3/SDL.h>  // for SDL3
 #include "input.h"     // the header implemented here
 
-struct UserInput
+/* Contains all the states of the keyboard keys (pressed or not) and
+ * mouse motion data necessary for the program to take the actions
+ * specified by the user at any given time.
+ */
+struct UserCommand
 {
     int   keyboardState;  // bit field of keys pressed/not pressed
     float xMouseMotion;   // the relative x motion of the mouse
@@ -26,10 +30,8 @@ struct UserInput
  * user's input generates a quit event, so the return value can be used
  * to check whether the user has quit.
  */
-bool input_handleUserEvents(
-    struct GameContext *restrict pGame,
-    SDL_Event          *restrict pEvent
-) {
+enum UserAction input_getNextAction(void)
+{
     // To keep track of the two fullscreen toggling keys
     static bool isFullscrKey1Down = false;
     static bool isFullscrKey2Down = false;

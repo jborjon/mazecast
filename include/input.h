@@ -13,36 +13,27 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include <stdbool.h>   // for the bool type
 #include <SDL3/SDL.h>  // for SDL3
 
-enum UserCommand
+/**
+ * @brief The game actions the user can perform through input devices.
+ *
+ * Each enumerator represents exactly one action from the user's input
+ * devices that should be converted into an in-game action or ignored,
+ * as determined by the current game state.
+ */
+enum UserAction
 {
-    COMMAND_TOGGLE_FULLSCREEN,
-    COMMAND_QUIT,
-    NUM_COMMANDS
+    ACTION_TOGGLE_FULLSCREEN,
+    ACTION_QUIT,
+    NUM_ACTIONS
 };
 
-/**
- * @brief The current state of the input devices, the keyboard and mouse.
- *
- * Contains all the states of the keyboard keys (pressed or not) and
- * mouse motion data necessary for the program to take the actions
- * specified by the user at any given time.
- */
-struct UserInput;
-
 
 /**
- * @brief Reads user inputs, always returning true unless the user quits.
- *
- * @param pGame  The game context.
- * @param pEvent The SDL event to use for polling events.
- * @return       Always true unless the user's input generates a quit event.
+ * @brief Returns the next user command in the command queue or NULL if none.
+ * @return The next user command to process, or NULL if the queue is empty.
  */
-bool input_handleUserEvents(
-    struct GameContext *restrict pGame,
-    SDL_Event          *restrict pEvent
-);
+enum UserAction input_getNextAction(void);
 
 #endif  // INPUT_H
