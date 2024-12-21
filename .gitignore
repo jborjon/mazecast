@@ -30,7 +30,7 @@ CMakeUserPresets.json
 
 # Doxygen stuff
 /docs/*
-!Doxyfile
+![Dd]oxyfile
 
 # C stuff - thanks to
 # https://github.com/github/gitignore/blob/main/C.gitignore
