@@ -22,4 +22,4 @@ My aim is to create a simple game that forces me to dive into game programming p
 
 ## Dedication
 
-The world wouldn't be the same today without [Dennis Ritchie](https://en.wikipedia.org/wiki/Dennis_Ritchie) and the other pioneers who made so many technologies, including C, possible. We are all beneficiaries of their work, and this is to their heatlh. You'll live on forever, dmr!
+The world wouldn't be the same today without [Dennis Ritchie](https://en.wikipedia.org/wiki/Dennis_Ritchie) and the other pioneers who made so many technologies, including C, possible. We are all beneficiaries of their work, and this is to their health. You'll live on forever, dmr!
