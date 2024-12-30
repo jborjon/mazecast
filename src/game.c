@@ -34,7 +34,7 @@ struct GameContext {
 static bool setDefaultValues(struct GameContext *pGame, const char *title);
 
 // Executes the user's requested actions one by one each frame
-static void processUserActions(struct GameContext *restrict pGame);
+static void processGameActions(struct GameContext *restrict pGame);
 
 
 // === Interface function definitions === //
@@ -85,7 +85,7 @@ void game_runMainLoop(struct GameContext *restrict pGame)
     {
         // React to the user's input
         input_refreshActions();
-        processUserActions(pGame);
+        processGameActions(pGame);
 
         // Render to the window
         SDL_SetRenderDrawColor(
@@ -137,9 +137,9 @@ static bool setDefaultValues(struct GameContext *pGame, const char *title)
     assert(pGame != NULL);
 
     pGame->isFullscreen = false;
-    SDL_WindowFlags windowFlags =
-         (SDL_WINDOW_FULLSCREEN * pGame->isFullscreen)
-        | SDL_WINDOW_KEYBOARD_GRABBED;
+    SDL_WindowFlags windowFlags
+        = (SDL_WINDOW_FULLSCREEN * pGame->isFullscreen)
+        |  SDL_WINDOW_KEYBOARD_GRABBED;
 
     // Allocate a window
     pGame->window = SDL_CreateWindow(title, 1280, 720, windowFlags);
@@ -176,7 +176,7 @@ static bool setDefaultValues(struct GameContext *pGame, const char *title)
 /* Converts the abstract actions in the input module's action queue into
  * concrete in-game actions.
  */
-static void processUserActions(struct GameContext *restrict pGame)
+static void processGameActions(struct GameContext *restrict pGame)
 {
     struct GameAction action;
     while (input_loadNextAction(&action))

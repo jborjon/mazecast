@@ -72,8 +72,7 @@ void input_refreshActions(void)
         case SDL_EVENT_KEY_DOWN:
             switch (event.key.key)
             {
-            case SDLK_LALT:  // fall through to catch either key
-            case SDLK_RALT:
+            case SDLK_LALT:
                 isFullscrKey1Down = true;
                 break;
             case SDLK_RETURN:
@@ -97,8 +96,7 @@ void input_refreshActions(void)
         case SDL_EVENT_KEY_UP:
             switch (event.key.key)
             {
-            case SDLK_LALT:  // fall through to catch either key
-            case SDLK_RALT:
+            case SDLK_LALT:
                 isFullscrKey1Down = false;
                 break;
             case SDLK_RETURN:
