@@ -4,7 +4,8 @@
  *
  * Defines the interface for the game module and provides internal
  * helper functions and data structures to initialize, interact with,
- * update, and delete the game state.
+ * update, and delete the game state. Also provides internal helper
+ * functions.
  *
  * @author Joseph Borjon
  * @date   2024-12-10
@@ -23,25 +24,25 @@ struct GameContext {
     SDL_Window   *restrict window;            // the program window
     SDL_Renderer *restrict renderer;          // the renderer for the window
     bool                   isFullscreen : 1;  // is the game at full screen?
+    bool                   isRunning    : 1;  // is the game currently running?
 };
 
 
 // === Static function prototypes === //
 
 // Sets the context members to their default values, printing any errors
-static bool setDefaultValues(struct GameContext *pGame);
+static bool setDefaultValues(struct GameContext *pGame, const char *title);
 
-// Clears all events in the event queue at the moment it's invoked
-static void clearEventQueue(SDL_Event *pEvent);
+// Executes the user's requested actions one by one each frame
+static void processUserActions(struct GameContext *restrict pGame);
 
 
-// === External function definitions === //
+// === Interface function definitions === //
 
-/**
- * Parses the command-line arguments, if any are given. Allocates and
+/* Parses the command-line arguments, if any are given. Allocates and
  * initializes the data structures required for a playable game context.
  */
-struct GameContext * game_initContext(int argc, char **argv)
+struct GameContext *game_initContext(int argc, char **argv, const char *title)
 {
     if (!SDL_Init(SDL_INIT_VIDEO))  // implies event init too
     {
@@ -57,9 +58,9 @@ struct GameContext * game_initContext(int argc, char **argv)
 
     if (pGame)
     {
-        if (!setDefaultValues(pGame))     // make sure setting values succeeds
+        if (!setDefaultValues(pGame, title))  // ensure setting values succeeds
         {
-            freeMemory((void **)&pGame);  // sets pGame to NULL
+            freeMemory((void **)&pGame);     // sets pGame to NULL
         }
     }
     else
@@ -71,19 +72,21 @@ struct GameContext * game_initContext(int argc, char **argv)
 }
 
 
-/**
- * Continuously calls the functions required to play, update, and render
+/* Continuously calls the functions required to play, update, and render
  * the game. The loop ends when the user enters the right inputs to
  * terminate the game.
  */
 void game_runMainLoop(struct GameContext *restrict pGame)
 {
-    SDL_Event event;
-    clearEventQueue(&event);
+    input_clearEventQueue();  // start with a blank events slate
 
     // Run the main loop
-    while (input_getNextCommand(pGame, &event))
+    while (pGame->isRunning)
     {
+        // React to the user's input
+        input_refreshActions();
+        processUserActions(pGame);
+
         // Render to the window
         SDL_SetRenderDrawColor(
             pGame->renderer,
@@ -99,11 +102,10 @@ void game_runMainLoop(struct GameContext *restrict pGame)
 }
 
 
-/**
- * Deallocates every bit of memory allocated for the game and nullifies
+/* Deallocates every bit of memory allocated for the game and nullifies
  * all pointers to that memory.
  */
-void game_destroy(struct GameContext **ppGame)
+void game_destroy(struct GameContext * restrict *ppGame)
 {
     SDL_DestroyRenderer((*ppGame)->renderer);
     (*ppGame)->renderer = NULL;
@@ -118,9 +120,10 @@ void game_destroy(struct GameContext **ppGame)
 
 // === Static function definitions === //
 
-/*
- * Specifies sensible values for a brand-new game context; for example,
- * all the pointers are set to NULL.
+/* Specifies sensible values for a brand-new game context; for example,
+ * all the pointers are set to `NULL`.
+ *
+ * Sets the window title to the title passed in.
  *
  * In case of failing to initialize any value, it prints its own error
  * message to specify which one did, stopping after the first failure
@@ -129,7 +132,7 @@ void game_destroy(struct GameContext **ppGame)
  * Can also be used to reset the game context values to their defaults
  * after modifying them.
  */
-static bool setDefaultValues(struct GameContext *pGame)
+static bool setDefaultValues(struct GameContext *pGame, const char *title)
 {
     assert(pGame != NULL);
 
@@ -139,7 +142,7 @@ static bool setDefaultValues(struct GameContext *pGame)
         | SDL_WINDOW_KEYBOARD_GRABBED;
 
     // Allocate a window
-    pGame->window = SDL_CreateWindow("Mazecast", 1280, 720, windowFlags);
+    pGame->window = SDL_CreateWindow(title, 1280, 720, windowFlags);
 
     if (!pGame->window)
     {
@@ -165,17 +168,28 @@ static bool setDefaultValues(struct GameContext *pGame)
         return false;
     }
 
+    pGame->isRunning = true;  // and we're on
     return true;
 }
 
 
-/**
- * Reads all the events currently in SDL3's event queue and does nothing
- * with them, effectively discarding them. Call right before starting
- * the main loop and right after transitioning states.
+/* Converts the abstract actions in the input module's action queue into
+ * concrete in-game actions.
  */
-static void clearEventQueue(SDL_Event *pEvent)
+static void processUserActions(struct GameContext *restrict pGame)
 {
-    while (SDL_PollEvent(pEvent))
-        ;  // empty on purpose
+    struct GameAction action;
+    while (input_loadNextAction(&action))
+    {
+        switch (action.command)
+        {
+        case COMMAND_TOGGLE_FULLSCR:
+            pGame->isFullscreen = !pGame->isFullscreen;
+            SDL_SetWindowFullscreen(pGame->window, pGame->isFullscreen);
+            break;
+        case COMMAND_QUIT:
+            pGame->isRunning = false;
+            break;
+        }
+    }
 }

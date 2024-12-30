@@ -31,11 +31,12 @@ struct GameContext;
  * running the main game loop; i.e., don't ever pass an uninitialized or
  * null pointer to game_runMainLoop.
  *
- * @param argc Number of command-line arguments from main(), if any.
- * @param argv List of command-line arguments from main(); can be null.
- * @return     Pointer to the just-initialized game context, or NULL on failure.
+ * @param argc  Number of command-line arguments from main(), if any.
+ * @param argv  List of command-line arguments from main(); can be null.
+ * @param title Title of the game.
+ * @return      Pointer to the just-initialized game context; `NULL` on failure.
  */
-struct GameContext * game_initContext(int argc, char **argv);
+struct GameContext *game_initContext(int argc, char **argv, const char *title);
 
 
 /**
@@ -49,6 +50,6 @@ void game_runMainLoop(struct GameContext *restrict pGame);
  * @brief Cleans up memory after a game; only call it after game_runMainLoop.
  * @param ppGame Pointer to the game-context pointer.
  */
-void game_destroy(struct GameContext **ppGame);
+void game_destroy(struct GameContext * restrict *ppGame);
 
 #endif  // GAME_H

@@ -9,40 +9,68 @@
  * @date   2024-12-16
  */
 
-#include <stdbool.h>   // for the bool type
-#include <SDL3/SDL.h>  // for SDL3
-#include "input.h"     // the header implemented here
+#include <stdbool.h>    // for the bool type
+#include <assert.h>     // for debugging assertions
+#include <SDL3/SDL.h>   // for SDL3 events
+#include "input.h"      // the header implemented here
 
-/* Contains all the states of the keyboard keys (pressed or not) and
- * mouse motion data necessary for the program to take the actions
- * specified by the user at any given time.
- */
-struct UserCommand
+#define MAX_ACTIONS 32  // the highest possible number of actions in the queue
+
+// Container for the game actions to be executed
+struct ActionQueue
 {
-    int   keyboardState;  // bit field of keys pressed/not pressed
-    float xMouseMotion;   // the relative x motion of the mouse
-    float yMouseMotion;   // the relative y motion of the mouse
+    struct GameAction actions[MAX_ACTIONS];  // container for the actions
+    int               size;                  // number of actions in the queue
+    int               head;                  // index of the current action
+};
+
+// The action queue itself
+static struct ActionQueue _actionQueue = {
+    .actions = {},
+    .size    = 0,
+    .head    = 0
 };
 
 
-/*
- * Reads user keyboard and mouse inputs. Always returns true unless the
- * user's input generates a quit event, so the return value can be used
- * to check whether the user has quit.
+// === Static function prototypes === //
+
+// Adds an action with the specified value to the end of the queue if not full
+void appendGameAction(enum UserCommand command, float magnitude);
+
+
+// === Interface function definitions === //
+
+/* Reads all the events currently in SDL3's event queue and does nothing
+ * with them, effectively discarding them.
  */
-enum UserAction input_getNextAction(void)
+void input_clearEventQueue(void)
 {
-    // To keep track of the two fullscreen toggling keys
+    SDL_Event discardedEvent;
+    while (SDL_PollEvent(&discardedEvent))
+        ;  // empty on purpose
+}
+
+
+/* Reads user device inputs, converts them to game actions, and puts the
+ * actions in the action queue in FIFO order.
+ */
+void input_refreshActions(void)
+{
+    // To keep track of the two fullscreen-toggling keys
     static bool isFullscrKey1Down = false;
     static bool isFullscrKey2Down = false;
 
-    bool isRunning = true;  // for the return value, not the loop below
-    while (SDL_PollEvent(pEvent))
+    // Reset the queue
+    _actionQueue.size = 0;
+    _actionQueue.head = 0;
+
+    SDL_Event event;
+    while (SDL_PollEvent(&event))
     {
-        switch (pEvent->type)
+        switch (event.type)
         {
         case SDL_EVENT_KEY_DOWN:
-            switch (pEvent->key.key)
+            switch (event.key.key)
             {
             case SDLK_LALT:    // fall through to catch either key
             case SDLK_RALT:
@@ -51,16 +79,15 @@ enum UserAction input_getNextAction(void)
             case SDLK_RETURN:
                 isFullscrKey2Down = true;
                 break;
-            case SDLK_ESCAPE:  // quit the main loop
-                isRunning = false;
+            case SDLK_ESCAPE:
+                appendGameAction(COMMAND_QUIT, 0.0);
                 break;
             }
 
             // Toggle full screen
             if (isFullscrKey1Down && isFullscrKey2Down)
             {
-                pGame->isFullscreen = !pGame->isFullscreen;
-                SDL_SetWindowFullscreen(pGame->window, pGame->isFullscreen);
+                appendGameAction(COMMAND_TOGGLE_FULLSCR, 0.0);
 
                 // Prevent repeated toggling until after the keys are released
                 isFullscrKey1Down = false;
@@ -68,7 +95,7 @@ enum UserAction input_getNextAction(void)
             }
             break;  // SDL_EVENT_KEY_DOWN
         case SDL_EVENT_KEY_UP:
-            switch (pEvent->key.key)
+            switch (event.key.key)
             {
             case SDLK_LALT:  // fall through to catch either key
             case SDLK_RALT:
@@ -80,10 +107,42 @@ enum UserAction input_getNextAction(void)
             }
             break;  // SDL_EVENT_KEY_UP
         case SDL_EVENT_QUIT:
-            isRunning = false;
+            appendGameAction(COMMAND_QUIT, 0.0);
             break;
         }
     }
 
-    return isRunning;
+    assert(_actionQueue.size <= MAX_ACTIONS);
+}
+
+
+/* TODO: Document
+ */
+bool input_loadNextAction(struct GameAction *restrict pAction)
+{
+    if (_actionQueue.head >= _actionQueue.size)  // at the end of the queue
+    {
+        return false;
+    }
+
+    assert(_actionQueue.head < _actionQueue.size);
+    *pAction = _actionQueue.actions[_actionQueue.head++];
+
+    return true;
+}
+
+
+// === Static function definitions === //
+
+/* TODO: Document
+ */
+void appendGameAction(enum UserCommand command, float magnitude)
+{
+    if (_actionQueue.size < MAX_ACTIONS)
+    {
+        _actionQueue.actions[_actionQueue.size++] = (struct GameAction) {
+            .command   = command,
+            .magnitude = magnitude
+        };
+    }
 }

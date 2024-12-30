@@ -1,6 +1,6 @@
 /**
  * @file  main.c
- * @brief Contains main(), the entry and exit point for the game.
+ * @brief Contains `main()`, the entry point for the game.
  *
  * Contains the main function of the program, which calls the procedures
  * to initialize a game context, run its main loop, and clean up the
@@ -15,9 +15,9 @@
 #include <SDL3/SDL_main.h>  // for SDL3 to handle the program entry point
 #include "game.h"           // for handling the game context
 
+#define GAME_TITLE  "Mazecast"
 
-/*
- * The program's main function.
+/* The program's main function.
  *
  * Neither the order nor the number of command-line arguments matters
  * as long as the arguments are valid. Invalid arguments will be ignored
@@ -29,7 +29,11 @@
 int main(int argc, char **argv)
 {
     // Initialize the game
-    struct GameContext *restrict pGame = game_initContext(argc, argv);
+    struct GameContext *restrict pGame = game_initContext(
+        argc,
+        argv,
+        GAME_TITLE
+    );
 
     if (!pGame)
     {
