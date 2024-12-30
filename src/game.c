@@ -60,7 +60,7 @@ struct GameContext *game_initContext(int argc, char **argv, const char *title)
     {
         if (!setDefaultValues(pGame, title))  // ensure setting values succeeds
         {
-            freeMemory((void **)&pGame);     // sets pGame to NULL
+            freeMemory((void **)&pGame);      // sets pGame to NULL
         }
     }
     else
