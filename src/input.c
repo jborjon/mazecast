@@ -40,14 +40,12 @@ void appendGameAction(enum UserCommand command, float magnitude);
 
 // === Interface function definitions === //
 
-/* Reads all the events currently in SDL3's event queue and does nothing
- * with them, effectively discarding them.
+/* Places all pending SDL3 events in the event queue and flushes them.
  */
 void input_clearEventQueue(void)
 {
-    SDL_Event discardedEvent;
-    while (SDL_PollEvent(&discardedEvent))
-        ;  // empty on purpose
+    SDL_PumpEvents();
+    SDL_FlushEvents(SDL_EVENT_FIRST, SDL_EVENT_LAST);
 }
 
 
