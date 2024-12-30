@@ -17,6 +17,7 @@
 
 #define GAME_TITLE  "Mazecast"
 
+
 /* The program's main function.
  *
  * Neither the order nor the number of command-line arguments matters
