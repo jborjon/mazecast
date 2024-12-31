@@ -40,12 +40,14 @@ void appendGameAction(enum UserCommand command, float magnitude);
 
 // === Interface function definitions === //
 
-/* Places all pending SDL3 events in the event queue and flushes them.
+/* Reads all the events currently in SDL3's event queue and does nothing
+ * with them, effectively discarding them.
  */
 void input_clearEventQueue(void)
 {
-    SDL_PumpEvents();
-    SDL_FlushEvents(SDL_EVENT_FIRST, SDL_EVENT_LAST);
+    SDL_Event discardedEvent;
+    while (SDL_PollEvent(&discardedEvent))
+        ;  // empty on purpose
 }
 
 
@@ -70,7 +72,8 @@ void input_refreshActions(void)
         case SDL_EVENT_KEY_DOWN:
             switch (event.key.key)
             {
-            case SDLK_LALT:
+            case SDLK_LALT:  // fall through to catch either key
+            case SDLK_RALT:
                 isFullscrKey1Down = true;
                 break;
             case SDLK_RETURN:
@@ -94,7 +97,8 @@ void input_refreshActions(void)
         case SDL_EVENT_KEY_UP:
             switch (event.key.key)
             {
-            case SDLK_LALT:
+            case SDLK_LALT:  // fall through to catch either key
+            case SDLK_RALT:
                 isFullscrKey1Down = false;
                 break;
             case SDLK_RETURN:
