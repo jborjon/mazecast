@@ -12,6 +12,7 @@ target_sources(mazecast
         ${SRC_DIR}/main.c
         ${SRC_DIR}/game.c
         ${SRC_DIR}/input.c
+        ${SRC_DIR}/player.c
         ${SRC_DIR}/utils.c
 )
 

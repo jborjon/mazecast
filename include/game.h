@@ -47,8 +47,11 @@ void game_runMainLoop(struct GameContext *restrict pGame);
 
 
 /**
- * @brief Cleans up memory after a game; only call it after game_runMainLoop.
+ * @brief Cleans up memory once the game context is no longer needed.
  * @param ppGame Pointer to the game-context pointer.
+ * 
+ * Deallocates all memory used by the game context and sets the value of
+ * of the game-context pointer (pointed to by `ppGame`) to `NULL`.
  */
 void game_destroy(struct GameContext * restrict *ppGame);
 

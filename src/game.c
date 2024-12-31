@@ -4,8 +4,7 @@
  *
  * Defines the interface for the game module and provides internal
  * helper functions and data structures to initialize, interact with,
- * update, and delete the game state. Also provides internal helper
- * functions.
+ * update, and delete the game state.
  *
  * @author Joseph Borjon
  * @date   2024-12-10
