@@ -33,19 +33,24 @@ struct Player;
  *
  * @return Pointer to the just-initialized player context; `NULL` on failure.
  */
-struct Player *player_init(void);
+struct Player *player_init(
+    double startingXPos,
+    double startingYPos,
+    double startingXDir,
+    double startingYDir
+);
 
 
 /**
- * @brief Updates the player state based on game events.
+ * @brief Updates the player state based on the data passed in.
  * @param pPlayer Pointer to the player context.
  */
 void player_update(struct Player *restrict pPlayer);
 
 
 /**
- * @brief Deallocates the player and sets the player pointer to `NULL`.
- * @param ppPlayer Pointer to the player-context pointer.
+ * @brief Deallocates the player and sets its pointer to `NULL`.
+ * @param ppPlayer Pointer to the player-context pointer to be deallocated.
  */
 void player_destroy(struct Player *restrict *ppPlayer);
 

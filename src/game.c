@@ -17,13 +17,15 @@
 #include <SDL3/SDL.h>  // for SDL3
 #include "game.h"      // the header implemented here
 #include "input.h"     // for handling user input
+#include "player.h"    // for the player module
 #include "utils.h"     // for freeing pointers
 
 struct GameContext {
-    SDL_Window   *restrict window;            // the program window
-    SDL_Renderer *restrict renderer;          // the renderer for the window
-    bool                   isFullscreen : 1;  // is the game at full screen?
-    bool                   isRunning    : 1;  // is the game currently running?
+    SDL_Window    *restrict window;            // the program window
+    SDL_Renderer  *restrict renderer;          // the renderer for the window
+    struct Player *restrict player;            // the user's in-game avatar
+    bool                    isFullscreen : 1;  // is the game at full screen?
+    bool                    isRunning    : 1;  // is the game currently running?
 };
 
 
@@ -59,7 +61,7 @@ struct GameContext *game_initContext(int argc, char **argv, const char *title)
     {
         if (!setDefaultValues(pGame, title))  // ensure setting values succeeds
         {
-            freeMemory((void **)&pGame);      // sets pGame to NULL
+            freeMemory((void **)&pGame);      // sets pGame back to to NULL
         }
     }
     else
@@ -119,10 +121,8 @@ void game_destroy(struct GameContext * restrict *ppGame)
 
 // === Static function definitions === //
 
-/* Specifies sensible values for a brand-new game context; for example,
- * all the pointers are set to `NULL`.
- *
- * Sets the window title to the title passed in.
+/* Specifies sensible intial values for a brand-new game context. Also
+ * sets the window title to the title string passed in.
  *
  * In case of failing to initialize any value, it prints its own error
  * message to specify which one did, stopping after the first failure
@@ -163,6 +163,21 @@ static bool setDefaultValues(struct GameContext *pGame, const char *title)
             "Failed to initialize a renderer for the game window: %s.",
             SDL_GetError()
         );
+        free(pGame->window);
+        return false;
+    }
+
+    // Allocate the player
+    pGame->player = player_init(32.0, 64.0, 0.0, -1.0);
+
+    if (!pGame->player)
+    {
+        SDL_LogError(
+            SDL_LOG_CATEGORY_ERROR,
+            "Failed to initialize a player: %s.",
+            SDL_GetError()
+        );
+        free(pGame->renderer);  // free first to avoid a dangling window pointer
         free(pGame->window);
         return false;
     }
