@@ -15,7 +15,8 @@
 #include "player.h"  // the header implemented here
 #include "utils.h"   // for freeing pointers
 
-struct Player {
+struct Player
+{
     double xPos;    // player x-position in the game world
     double yPos;    // player y-position
     double xDir;    // player's facing direction in x

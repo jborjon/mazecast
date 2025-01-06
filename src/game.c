@@ -20,7 +20,8 @@
 #include "player.h"    // for the player module
 #include "utils.h"     // for freeing pointers
 
-struct GameContext {
+struct GameContext
+{
     SDL_Window    *restrict window;            // the program window
     SDL_Renderer  *restrict renderer;          // the renderer for the window
     struct Player *restrict player;            // the user's in-game avatar
