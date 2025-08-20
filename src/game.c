@@ -137,9 +137,9 @@ static bool setDefaultValues(struct GameContext *pGame, const char *title)
     assert(pGame != NULL);
 
     pGame->isFullscreen = false;
-    SDL_WindowFlags windowFlags
-        = (SDL_WINDOW_FULLSCREEN * pGame->isFullscreen)
-        |  SDL_WINDOW_KEYBOARD_GRABBED;
+    SDL_WindowFlags windowFlags =
+        ( SDL_WINDOW_FULLSCREEN * pGame->isFullscreen )
+        | SDL_WINDOW_KEYBOARD_GRABBED;
 
     // Allocate a window
     pGame->window = SDL_CreateWindow(title, 1280, 720, windowFlags);

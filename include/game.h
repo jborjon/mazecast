@@ -51,7 +51,7 @@ void game_runMainLoop(struct GameContext *restrict pGame);
  * @param ppGame Pointer to the game-context pointer.
  * 
  * Deallocates all memory used by the game context and sets the value of
- * of the game-context pointer (pointed to by `ppGame`) to `NULL`.
+ * the game-context pointer (pointed to by `ppGame`) to `NULL`.
  */
 void game_destroy(struct GameContext * restrict *ppGame);
 
