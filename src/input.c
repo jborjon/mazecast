@@ -80,14 +80,14 @@ void input_refreshActions(void)
                 isFullscrKey2Down = true;
                 break;
             case SDLK_ESCAPE:
-                appendGameAction(COMMAND_QUIT, 0.0);
+                appendGameAction(CMD_QUIT, 0.0);
                 break;
             }
 
             // Toggle full screen
             if (isFullscrKey1Down && isFullscrKey2Down)
             {
-                appendGameAction(COMMAND_TOGGLE_FULLSCR, 0.0);
+                appendGameAction(CMD_TOGGLE_FULLSCREEN, 0.0);
 
                 // Prevent repeated toggling until after the keys are released
                 isFullscrKey1Down = false;
@@ -107,7 +107,7 @@ void input_refreshActions(void)
             }
             break;  // SDL_EVENT_KEY_UP
         case SDL_EVENT_QUIT:
-            appendGameAction(COMMAND_QUIT, 0.0);
+            appendGameAction(CMD_QUIT, 0.0);
             break;
         }
     }

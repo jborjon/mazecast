@@ -198,11 +198,11 @@ static void processGameActions(struct GameContext *restrict pGame)
     {
         switch (action.command)
         {
-        case COMMAND_TOGGLE_FULLSCR:
+        case CMD_TOGGLE_FULLSCREEN:
             pGame->isFullscreen = !pGame->isFullscreen;
             SDL_SetWindowFullscreen(pGame->window, pGame->isFullscreen);
             break;
-        case COMMAND_QUIT:
+        case CMD_QUIT:
             pGame->isRunning = false;
             break;
         }

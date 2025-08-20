@@ -27,8 +27,8 @@
  */
 enum UserCommand
 {
-    COMMAND_TOGGLE_FULLSCR,  ///< toggle between full and windowed screen
-    COMMAND_QUIT             ///< exit the game loop
+    CMD_TOGGLE_FULLSCREEN,  ///< toggle between full and windowed screen
+    CMD_QUIT                ///< exit the game loop
 };
 
 /**
