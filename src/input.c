@@ -3,7 +3,7 @@
  * @brief Implementation of the input module.
  *
  * Defines the interface for the input module and provides internal
- * helper functions 
+ * helper functions to clear, refresh, and read the action queue.
  *
  * @author Joseph Borjon
  * @date   2024-12-16
@@ -14,7 +14,7 @@
 #include <SDL3/SDL.h>   // for SDL3 events
 #include "input.h"      // the header implemented here
 
-#define MAX_ACTIONS 32  // the highest possible number of actions in the queue
+#define MAX_ACTIONS  32  // the highest possible number of actions in the queue
 
 // Container for the game actions to be executed
 struct ActionQueue
