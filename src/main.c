@@ -14,8 +14,7 @@
 #include <stdlib.h>         // for EXIT_FAILURE
 #include <SDL3/SDL_main.h>  // for SDL3 to handle the program entry point
 #include "game.h"           // for handling the game context
-
-#define GAME_TITLE  "Mazecast"
+#include "defines.h"        // for the game title
 
 
 /* The program's main function.
