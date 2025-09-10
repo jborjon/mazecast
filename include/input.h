@@ -27,8 +27,10 @@
  */
 enum UserCommand
 {
+    CMD_UNKNOWN,            ///< unknown command
     CMD_TOGGLE_FULLSCREEN,  ///< toggle between full and windowed screen
-    CMD_QUIT                ///< exit the game loop
+    CMD_QUIT,               ///< exit the game loop
+    NUM_COMMANDS            ///< total number of commands
 };
 
 /**
