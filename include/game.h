@@ -18,7 +18,7 @@
  *
  * Contains all relevant game properties needed by the different
  * subsystems. Access and mutate its members through the functions
- * provided by the game module interface.
+ * provided by this header interface.
  */
 struct GameContext;
 

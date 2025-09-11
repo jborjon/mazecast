@@ -18,7 +18,7 @@
  *
  * Contains all relevant player properties needed by the different
  * subsystems. Access and mutate its members through the functions
- * provided by the player module interface.
+ * provided by this header interface.
  */
 struct Player;
 
